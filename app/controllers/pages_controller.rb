@@ -6,15 +6,43 @@ class PagesController < ApplicationController
     end
 
     def show
+        @page = Page.find(params[:id])
+        render component: "Page", props:{page:@page}
     end
 
+    def new
+        render component: "PageNew"
+
+    end
     def create
+        page = Page.new(page_params)
+        if page.save
+            redirect_to pages_path
+        else
+        end
     end
     
-    def delete
+    def destroy
+        @page = Page.find(params[:id])
+        @page.destroy
+        redirect_to pages_path
     end
     
     def update
+        @page = Page.find(params[:id])
+        if( @page.update(page_params))
+        else
+        end
+    end
+    def edit
+        @page = Page.find(params[:id])
+        render component: "PageEdit", props:{page:@page}
+    end
+
+    private
+
+    def page_params
+        params.require(:page).permit(:title, :author, :body)
     end
 
 end
